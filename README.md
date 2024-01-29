@@ -1,7 +1,8 @@
 # This is a codebase that allows the generation and saving of dynamic and static QR codes.
 
 ## For use with Docker:
-See docker.yaml
+See docker-compose.yaml
+
 Run:
 * docker compose build --no-cache 
 * docker compose up -d
