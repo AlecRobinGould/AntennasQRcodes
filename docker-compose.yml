@@ -1,0 +1,48 @@
+version: "3.2"
+
+services:
+  dynamicqrcodes:
+    image: "alecrobingould/dynamicqrcodes:latest"
+    restart: "unless-stopped"
+    environment:
+      TYPE: "docker"
+      BASE_URL: "http://agould-ntb.emss.co.za"
+      DATABASE_HOST: "dynamicqrcodesdb"
+      DATABASE_PORT: "3306"
+      DATABASE_NAME: "qrcode"
+      DATABASE_USER: "antlab"
+      DATABASE_PASSWORD: "changethis"
+      DATABASE_PREFIX: ""
+      DATABASE_CHARSET: "utf8"
+    ports:
+      - 80:80
+    depends_on:
+      - dynamicqrcodesdb
+    volumes:
+      - dynamicqrcodesdata:/var/www/html/saved_qrcode
+    networks:
+      - dynamicqrcodes
+
+  dynamicqrcodesdb:
+    image: "alecrobingould/dynamicqrcodesdb:latest"
+    restart: "unless-stopped"
+    volumes:
+      - dynamicqrcodesdbdata:/var/lib/mysql
+    ports:
+      - '13306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: "#antlab#"
+      MYSQL_DATABASE: "qrcode"
+      MYSQL_USER: "antlab"
+      MYSQL_PASSWORD: "changethis"
+    networks:
+      - dynamicqrcodes
+
+volumes:
+  dynamicqrcodesdbdata:
+  dynamicqrcodesconfig_data:
+  dynamicqrcodesdata:
+
+networks:
+  dynamicqrcodes:
+    driver: bridge
